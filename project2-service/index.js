@@ -212,6 +212,45 @@ service.patch('/like/:id', (request, response) => {
   });
 });
 
+service.patch('/posts/:id', (request, response) => {
+  if (request.body.hasOwnProperty('content')) {
+    const params = [
+      request.body.content,
+      parseInt(request.params.id)
+    ];
+    doesExist(id, function(result) {
+      if (result > 0) {
+        const query = "UPDATE posts SET content = ? WHERE id = ?";
+        connection.query(query, params, (error, result) => {
+          if (error) {
+            response.status(500);
+            response.json({
+              ok: false,
+              results: error.message
+            });
+          } else {
+            response.json({
+              ok: true
+            })
+          }
+        });
+      } else if (result == 0) {
+        response.status(404);
+        response.json({
+          ok: false,
+          results: "Post does not exist"
+        });
+      } else {
+        response.status(400);
+        response.json({
+          ok: false,
+          results: "Database error"
+        });
+      }
+    })
+  }
+});
+
 service.delete('/posts/:id', (request, response) => {
   const id = parseInt(request.params.id);
 
