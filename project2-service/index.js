@@ -218,7 +218,7 @@ service.patch('/posts/:id', (request, response) => {
       request.body.content,
       parseInt(request.params.id)
     ];
-    doesExist(params[0], function(result) {
+    doesExist(params[1], function(result) {
       if (result > 0) {
         const query = "UPDATE posts SET content = ? WHERE id = ?";
         connection.query(query, params, (error, result) => {
