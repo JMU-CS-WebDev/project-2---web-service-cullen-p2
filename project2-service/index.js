@@ -275,6 +275,7 @@ service.delete('/posts/:id', (request, response) => {
                 results: error.message
               });
             } else {
+              console.log(result1);
               if (result1 > 0) {
                 query = "UPDATE posts SET comments = comments - 1 WHERE id = ?";
                 connection.query(query, result1, (error2, result2) => {
@@ -331,7 +332,7 @@ function doesExist(id, callback) {
       return callback(-1);
     } else {
       if (result && result.length) {
-	console.log(result)
+	      console.log(result)
      	  return callback(result[0].id);
       } else {
 	      return callback(0);
