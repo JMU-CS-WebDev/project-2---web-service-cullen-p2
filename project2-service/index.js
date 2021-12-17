@@ -136,7 +136,7 @@ service.post('/comment/:id', (request, response) => {
               results: error.message
             });
           } else {
-	    const insertId = result.insertId
+	          const insertId = result.insertId
             const query2 = 'UPDATE posts SET comments = comments + 1 WHERE id = ?';
             connection.query(query2, params[0], (error, result) => {
               if (error) {
@@ -266,8 +266,36 @@ service.delete('/posts/:id', (request, response) => {
             results: error.message
           });
         } else {
-          response.json({
-            ok: true
+          query = "SELECT parent_id FROM posts WHERE id = ?";
+          connection.query(query, id, (error1, result1) =>{
+            if (error1) {
+              response.status(500);
+              response.json({
+                ok: false,
+                results: error.message
+              });
+            } else {
+              if (result1 > 0) {
+                query = "UPDATE posts SET comments = comments - 1 WHERE id = ?";
+                connection.query(query, result1, (error2, result2) => {
+                  if (error2) {
+                    response.status(500);
+                    response.json({
+                      ok: false,
+                      results: error.message
+                    });
+                  } else {
+                    response.json({
+                      ok: true
+                    });
+                  }
+                }
+              } else {
+                response.json({
+                  ok: true
+                });
+              }
+            }
           });
         }
       });
