@@ -290,7 +290,7 @@ service.delete('/posts/:id', (request, response) => {
                       ok: true
                     });
                   }
-                }
+                });
               } else {
                 response.json({
                   ok: true
